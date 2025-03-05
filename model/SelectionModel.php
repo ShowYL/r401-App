@@ -21,7 +21,7 @@ class SelectionModel
      */
     public function __construct()
     {
-        $db = new ConnectionBD();
+        $db = new Connection();
         $this->conn = $db->getConnection();
     }
 
@@ -41,8 +41,7 @@ class SelectionModel
         $stmt->bindParam(':ID_Match', $idMatch);
         $stmt->bindParam(':Titulaire', $titulaire);
         $stmt->bindParam(':Poste', $poste);
-        $result = $stmt->execute();
-        return $result;
+        return $stmt->execute();
     }
 
     /**
@@ -54,8 +53,7 @@ class SelectionModel
     {
         $stmt = $this->conn->prepare("SELECT ID_Selection, ID_Joueur, ID_Match, Titulaire, Poste FROM Selection");
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -69,14 +67,12 @@ class SelectionModel
         $stmt = $this->conn->prepare("SELECT * FROM Selection WHERE ID_Selection = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
      * Updates an existing selection record in the database.
      *
-     * @param int $id The ID of the selection.
      * @param int $idJoueur The ID of the player.
      * @param int $idMatch The ID of the match.
      * @param bool $titulaire Whether the player is a starter.
@@ -91,8 +87,7 @@ class SelectionModel
         $stmt->bindParam(':titulaire', $titulaire);
         $stmt->bindParam(':poste', $poste);
         $stmt->bindParam(':note', $note);
-        $result = $stmt->execute();
-        return $result;
+        return $stmt->execute();
     }
 
     public function deleteSelectionByPlayerAndMatch($idJoueur, $idMatch)
@@ -127,7 +122,7 @@ class SelectionModel
     {
         $stmt = $this->conn->prepare("DELETE FROM Selection WHERE ID_Selection = :id");
         $stmt->bindParam(':id', $id);
-        $result = $stmt->execute();
+        return $stmt->execute();
     }
 
     /**

@@ -22,7 +22,7 @@ class JoueurModel
      */
     public function __construct()
     {
-        $db = new ConnectionBD();
+        $db = new Connection();
         $this->conn = $db->getConnection();
     }
 
@@ -50,8 +50,7 @@ class JoueurModel
         $stmt->bindParam(':date_naissance', $date_naissance);
         $stmt->bindParam(':statut', $statut);
         $stmt->bindParam(':commentaire', $commentaire);
-        $result = $stmt->execute();
-        return $result;
+        return $stmt->execute();
     }
 
     /**
@@ -63,8 +62,7 @@ class JoueurModel
     {
         $stmt = $this->conn->prepare("SELECT ID_Joueur, Licence, Nom, Prénom, Taille, Poids, Date_Naissance, Statut FROM Joueur");
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -78,8 +76,7 @@ class JoueurModel
         $stmt = $this->conn->prepare("SELECT * FROM Joueur WHERE ID_Joueur = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -108,8 +105,7 @@ class JoueurModel
         $stmt->bindParam(':statut', $statut);
         $stmt->bindParam(':commentaire', $commentaire);
         $stmt->bindParam(':id', $id);
-        $result = $stmt->execute();
-        return $result;
+        return $stmt->execute();
     }
 
     /**
@@ -122,7 +118,7 @@ class JoueurModel
     {
         $stmt = $this->conn->prepare("DELETE FROM Joueur WHERE ID_Joueur = :id");
         $stmt->bindParam(':id', $id);
-        $result = $stmt->execute();
+        return $stmt->execute();
     }
 
     public function aDejaJouer($id)
@@ -138,8 +134,7 @@ class JoueurModel
     {
     $stmt = $this->conn->prepare("SELECT ID_Joueur, Nom, Prénom FROM Joueur WHERE Statut = 'actif'");
     $stmt->execute();
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $result;
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
