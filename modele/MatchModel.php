@@ -1,5 +1,5 @@
-<?php 
-require_once 'db_lestitansdesete.php';
+<?php
+require_once '../connection/connection.php';
 
 
 /**

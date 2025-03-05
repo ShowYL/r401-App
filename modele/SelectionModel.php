@@ -1,5 +1,5 @@
 <?php
-require_once 'db_lestitansdesete.php';
+require_once '../connection/connection.php';
 
 /**
  * Class SelectionModel
@@ -229,4 +229,5 @@ class SelectionModel
         $this->conn = null;
     }
 }
+
 ?>
