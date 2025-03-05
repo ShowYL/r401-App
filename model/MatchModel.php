@@ -43,6 +43,7 @@ class MatchModel{
         $stmt->bindParam(':lieu', $lieu);
         $stmt->bindParam(':resultat', $resultat);
         $result = $stmt->execute();
+        closeConnection();
         return $result;
     }
 
