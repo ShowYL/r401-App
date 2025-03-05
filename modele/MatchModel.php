@@ -21,7 +21,7 @@ class MatchModel{
      * Initializes a new instance of the MatchModel class.
      */
     public function __construct() {
-        $db = new ConnectionBD();
+        $db = new Connection();
         $this->conn = $db->getConnection();
     }
 
@@ -42,8 +42,7 @@ class MatchModel{
         $stmt->bindParam(':adversaire', $adversaire);
         $stmt->bindParam(':lieu', $lieu);
         $stmt->bindParam(':resultat', $resultat);
-        $result = $stmt->execute();
-        return $result;
+        return $stmt->execute();
     }
 
     /**
@@ -54,8 +53,7 @@ class MatchModel{
     public function getAllMatchs(){
         $stmt = $this->conn->prepare("SELECT ID_Match, Date_Match, Heure_Match, Equipe_Adverse, Lieu, Résultat FROM `Match`");
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $result;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -68,8 +66,7 @@ class MatchModel{
         $stmt = $this->conn->prepare("SELECT * FROM `Match` WHERE ID_Match = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -91,16 +88,14 @@ class MatchModel{
         $stmt->bindParam(':lieu', $lieu);
         $stmt->bindParam(':resultat', $resultat);
         $stmt->bindParam(':id', $id);
-        $result = $stmt->execute();
-        return $result;
+        return $stmt->execute();
     }
 
     public function updateMatchResult($resultat, $id) {
         $stmt = $this->conn->prepare("UPDATE `Match` SET Résultat = :resultat WHERE ID_Match = :id");
         $stmt->bindParam(':resultat', $resultat);
         $stmt->bindParam(':id', $id);
-        $result = $stmt->execute();
-        return $result;
+        return $stmt->execute();
     }
 
     /**
@@ -112,7 +107,7 @@ class MatchModel{
     public function deleteMatch($id) {
         $stmt = $this->conn->prepare("DELETE FROM `Match` WHERE ID_Match = :id");
         $stmt->bindParam(':id', $id);
-        $result = $stmt->execute();
+        return $stmt->execute();
     }
     
     /**
