@@ -6,6 +6,7 @@
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
     header('Access-Control-Allow-Headers: Content-Type');
 
+
     switch($_SERVER['REQUEST_METHOD']){
         case 'GET':
             $joueurs = getAllJoueurs();
@@ -19,15 +20,15 @@
                 else
                     deliver_response(500, "internal server error");
             else
-                deliver_response(400, "Invalid request");
+                deliver_response(401, "Invalid request");
             break;
         case 'PUT':
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['licence']) && isset($data['nom']) && isset($data['prenom']) && isset($data['taille']) && isset($data['poids']) && isset($data['date_naissance']) && isset($data['statut']) && isset($data['commentaire']) && isset($data['id']))
                 if(updateJoueur($data['licence'], $data['nom'], $data['prenom'], $data['taille'], $data['poids'], $data['date_naissance'], $data['statut'], $data['commentaire'], $data['id']))
-                    deliver_response(201, "Joueur updated");
+                    deliver_response(200, "Joueur updated");
                 else
-                    deliver_response(501, "internal server error");
+                    deliver_response(500, "internal server error");
             else
                 deliver_response(401, "Invalid request");
             break;
@@ -35,11 +36,11 @@
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['id']))
                 if(deleteJoueur($data['id']))
-                    deliver_response(202, "Joueur deleted");
+                    deliver_response(200, "Joueur deleted");
                 else
-                    deliver_response(502, "internal server error");
+                    deliver_response(500, "internal server error");
             else
-                deliver_response(402, "Invalid request");
+                deliver_response(401, "Invalid request");
             break;
     }
 
