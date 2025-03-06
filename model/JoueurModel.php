@@ -68,7 +68,6 @@
     function aDejaJouer($id)
     {
         global $con;
-
         $stmt = $con->prepare("SELECT * FROM Selection WHERE ID_Joueur = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
