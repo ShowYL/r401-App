@@ -1,42 +1,12 @@
 <?php
 require_once '../connection/connection.php';
 
-/**
- * Class SelectionModel
- *
- * This class represents the model for a selection (selection) in the application.
- * It is responsible for handling data operations related to selection.
- *
- * @package Les-Titans-de-Sete\models
- */
-class SelectionModel
-{
-    /**
-     * @var PDO $conn The database connection object.
-     */
-    private $conn;
+    $con = getDBCon();
 
-    /**
-     * Constructor initializes the database connection.
-     */
-    public function __construct()
+    function createSelection($idJoueur, $idMatch, $titulaire, $poste)
     {
-        $db = new Connection();
-        $this->conn = $db->getConnection();
-    }
-
-    /**
-     * Creates a new selection record in the database.
-     *
-     * @param int $idJoueur The ID of the player.
-     * @param int $idMatch The ID of the match.
-     * @param bool $titulaire Whether the player is a starter.
-     * @param string $poste The position of the player.
-     * @return bool Returns true on success, false on failure.
-     */
-    public function createSelection($idJoueur, $idMatch, $titulaire, $poste)
-    {
-        $stmt = $this->conn->prepare("INSERT INTO Selection (ID_Joueur, ID_Match, Titulaire, Poste) VALUES (:ID_Joueur, :ID_Match, :Titulaire, :Poste)");
+        global $con;
+        $stmt = $con->prepare("INSERT INTO Selection (ID_Joueur, ID_Match, Titulaire, Poste) VALUES (:ID_Joueur, :ID_Match, :Titulaire, :Poste)");
         $stmt->bindParam(':ID_Joueur', $idJoueur);
         $stmt->bindParam(':ID_Match', $idMatch);
         $stmt->bindParam(':Titulaire', $titulaire);
@@ -44,44 +14,27 @@ class SelectionModel
         return $stmt->execute();
     }
 
-    /**
-     * Retrieves all selection records from the database.
-     *
-     * @return array An associative array of all selection records.
-     */
-    public function getAllSelection()
+    function getAllSelection()
     {
-        $stmt = $this->conn->prepare("SELECT ID_Selection, ID_Joueur, ID_Match, Titulaire, Poste FROM Selection");
+        global $con;
+        $stmt = $con->prepare("SELECT ID_Selection, ID_Joueur, ID_Match, Titulaire, Poste FROM Selection");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Retrieves a specific selection record by ID.
-     *
-     * @param int $id The ID of the selection.
-     * @return array An associative array of the selection record.
-     */
-    public function getSelection($id)
+    function getSelection($id)
     {
-        $stmt = $this->conn->prepare("SELECT * FROM Selection WHERE ID_Selection = :id");
+        global $con;
+        $stmt = $con->prepare("SELECT * FROM Selection WHERE ID_Selection = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Updates an existing selection record in the database.
-     *
-     * @param int $idJoueur The ID of the player.
-     * @param int $idMatch The ID of the match.
-     * @param bool $titulaire Whether the player is a starter.
-     * @param string $poste The position of the player.
-     * @return bool Returns true on success, false on failure.
-     */
-    public function updateSelection($idJoueur, $idMatch, $titulaire, $poste, $note)
+    function updateSelection($idJoueur, $idMatch, $titulaire, $poste, $note)
     {
-        $stmt = $this->conn->prepare("UPDATE Selection SET ID_Joueur = :idJoueur, ID_Match = :idMatch, Titulaire = :titulaire, Poste = :poste, Note = :note WHERE ID_Match = :idMatch AND ID_Joueur = :idJoueur");
+        global $con;
+        $stmt = $con->prepare("UPDATE Selection SET ID_Joueur = :idJoueur, ID_Match = :idMatch, Titulaire = :titulaire, Poste = :poste, Note = :note WHERE ID_Match = :idMatch AND ID_Joueur = :idJoueur");
         $stmt->bindParam(':idJoueur', $idJoueur);
         $stmt->bindParam(':idMatch', $idMatch);
         $stmt->bindParam(':titulaire', $titulaire);
@@ -90,17 +43,19 @@ class SelectionModel
         return $stmt->execute();
     }
 
-    public function deleteSelectionByPlayerAndMatch($idJoueur, $idMatch)
+    function deleteSelectionByPlayerAndMatch($idJoueur, $idMatch)
     {
-        $stmt = $this->conn->prepare("DELETE FROM Selection WHERE ID_Joueur = :idJoueur AND ID_Match = :idMatch");
+        global $con;
+        $stmt = $con->prepare("DELETE FROM Selection WHERE ID_Joueur = :idJoueur AND ID_Match = :idMatch");
         $stmt->bindParam(':idJoueur', $idJoueur);
         $stmt->bindParam(':idMatch', $idMatch);
         return $stmt->execute();
     }
 
-    public function getSelectionByPlayerAndMatch($joueurId, $matchId)
+    function getSelectionByPlayerAndMatch($joueurId, $matchId)
     {
-        $stmt = $this->conn->prepare("
+        global $con;
+        $stmt = $con->prepare("
         SELECT s.ID_Selection, s.ID_Match, s.ID_Joueur, s.Titulaire, s.Poste, s.Note, m.Date_Match 
         FROM Selection s, `Match` m
         WHERE s.ID_Match = m.ID_Match
@@ -112,42 +67,27 @@ class SelectionModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Deletes a selection record from the database.
-     *
-     * @param int $id The ID of the selection.
-     * @return bool Returns true on success, false on failure.
-     */
-    public function deleteSelection($id)
+   function deleteSelection($id)
     {
-        $stmt = $this->conn->prepare("DELETE FROM Selection WHERE ID_Selection = :id");
+        global $con;
+        $stmt = $con->prepare("DELETE FROM Selection WHERE ID_Selection = :id");
         $stmt->bindParam(':id', $id);
         return $stmt->execute();
     }
 
-    /**
-     * Retrieves the list of players for a given match.
-     *
-     * @param int $idMatch The ID of the match.
-     * @return array An associative array containing the IDs of the players.
-     */
-    public function getPlayersByMatch($idMatch)
+    function getPlayersByMatch($idMatch)
     {
-        $stmt = $this->conn->prepare("SELECT ID_Joueur FROM Selection WHERE ID_Match = :id_match");
+        global $con;
+        $stmt = $con->prepare("SELECT ID_Joueur FROM Selection WHERE ID_Match = :id_match");
         $stmt->bindParam(':id_match', $idMatch);
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
-    /**
-     * Retrieve the statistics of a player based on their ID.
-     *
-     * @param int $id The ID of the player.
-     * @return array The player's statistics.
-     */
-    public function getPlayerStats($id)
+    function getPlayerStats($id)
     {
-        $stmt = $this->conn->prepare("
+        global $con;
+        $stmt = $con->prepare("
             SELECT 
                 COUNT(CASE WHEN Titulaire = 1 THEN 1 END) AS titularisations,
                 COUNT(CASE WHEN Titulaire = 0 THEN 1 END) AS remplacements,
@@ -162,15 +102,10 @@ class SelectionModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Retrieve the number of consecutive selections for a player.
-     *
-     * @param int $id The ID of the player.
-     * @return int The number of consecutive selections.
-     */
-    public function getConsecutiveSelections($id)
+   function getConsecutiveSelections($id)
     {
-        $stmt = $this->conn->prepare("
+        global $con;
+        $stmt = $con->prepare("
             SELECT COUNT(*) AS consecutive_selections
             FROM (
                 SELECT 
@@ -189,15 +124,10 @@ class SelectionModel
         return $result['consecutive_selections'];
     }
 
-    /**
-     * Retrieve the preferred position of a player based on the position they have played the most.
-     *
-     * @param int $id The ID of the player.
-     * @return string The preferred position of the player.
-     */
-    public function getPreferredPosition($id_joueur)
+    function getPreferredPosition($id_joueur)
     {
-        $stmt = $this->conn->prepare("
+        global $con;
+        $stmt = $con->prepare("
             SELECT Poste, COUNT(*) AS count
             FROM Selection
             WHERE ID_Joueur = :id
@@ -215,14 +145,6 @@ class SelectionModel
             return null;
         }
     }
-    
-    /**
-     * Closes the database connection.
-     */
-    public function closeConnection()
-    {
-        $this->conn = null;
-    }
-}
+
 
 ?>

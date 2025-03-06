@@ -1,71 +1,25 @@
 <?php
 
-/**
- * Class Connection
- *
- * This class handles the connection to a MySQL database using PDO.
- */
-class Connection {
+const DB_HOST = 'mysql-lestitansdesete.alwaysdata.net';
+const DB_NAME = 'lestitansdesete_bdapp';
+const DB_USER = '385432';
+const DB_PASS = '$iutinfo';
 
-    /**
-     * @var PDO|null $conn The PDO connection instance.
-     */
-    private $conn;
-
-    /**
-     * @var string $servername The server name for the database connection.
-     */
-    private $servername = "mysql-lestitansdesete.alwaysdata.net"; // "localhost";
-
-    /**
-     * @var string $username The username for the database connection.
-     */
-    private $username = "385432"; // "root";
-
-    /**
-     * @var string $password The password for the database connection.
-     */
-    private $password = "\$iutinfo";
-
-    /**
-     * @var string $dbname The database name.
-     */
-    private $dbname = "lestitansdesete_bdapp";
-
-    /**
-     * Connection constructor.
-     *
-     * Initializes the database connection using the provided credentials.
-     * Sets the PDO error mode to exception.
-     *
-     * @throws PDOException if the connection fails.
-     */
-    public function __construct() {
-        try {
-            $dsn = "mysql:host=$this->servername;dbname=$this->dbname;charset=utf8";
-            $this->conn = new PDO($dsn, $this->username, $this->password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die("La connexion a échoué: " . $e->getMessage());
-        }
+function getDBCon(){
+    try {
+        $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8";
+        $pdo = new PDO($dsn, DB_USER, DB_PASS);
+        
+        // Set error mode to exception
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+        return $pdo;
+        
+    } catch(PDOException $e) {
+        header('HTTP/1.1 500 Internal Server Error');
+        echo json_encode(['error' => 'Connection failed: ' . $e->getMessage()]);
+        exit();
     }
-
-    /**
-     * Get the PDO connection instance.
-     *
-     * @return PDO|null The PDO connection instance.
-     */
-    public function getConnection() {
-        return $this->conn;
-    }
-
-    /**
-     * Close the PDO connection.
-     */
-    public function closeConnection() {
-        $this->conn = null;
-    }
-
 }
 
 ?>
