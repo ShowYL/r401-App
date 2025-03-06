@@ -27,22 +27,22 @@
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['idMatch']) && isset($data['date']) && isset($data['heure']) && isset($data['adversaire']) && isset($data['lieu']) && isset($data['resultat']))
                 if(updateMatch($data['idMatch'], $data['date'], $data['heure'], $data['adversaire'], $data['lieu'], $data['resultat']))
-                    deliver_response(200, "Match updated");
+                    deliver_response(201, "Match updated");
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(501, "internal server error");
             else
-                deliver_response(400, "Invalid request");
+                deliver_response(401, "Invalid request");
             break;
 
         case 'DELETE':
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['idMatch']))
                 if(deleteMatch($data['idMatch']))
-                    deliver_response(200, "Match deleted");
+                    deliver_response(202, "Match deleted");
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(502, "internal server error");
             else 
-                deliver_response(400, "Invalid request");
+                deliver_response(402, "Invalid request");
             break;
     }
 ?>

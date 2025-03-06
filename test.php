@@ -11,7 +11,7 @@ function getAuthToken($url, $username, $password) {
     curl_setopt($ch, CURLOPT_URL, $url); // Set the URL
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data); 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Content-Type: application/json',
         'Content-Length: ' . strlen($data)
@@ -43,11 +43,11 @@ try {
     $token = getAuthToken($authUrl, $username, $password);
     
     // Afficher le token récupéré
-    echo "Token récupéré : " . $token . "\n";
+    error_log( "Token récupéré : " . $token );
     
     useDatabase($token);
 } catch (Exception $e) {
-    echo 'Erreur : ' . $e->getMessage();
+    error_log('Erreur : ' . $e->getMessage());
 }
 
 ?>
