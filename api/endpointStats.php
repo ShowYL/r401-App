@@ -6,6 +6,11 @@
     header('Access-Control-Allow-Methods: GET, POST');
     header('Access-Control-Allow-Headers: Content-Type');
 
+    if(!checkToken()){
+        deliver_response(401, 'Unauthorized');
+        exit();
+    }
+    
     switch($_SERVER['REQUEST_METHOD']){
         case 'GET':
             if (isset($_GET['player_id'])) {

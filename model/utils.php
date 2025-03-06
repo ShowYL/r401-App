@@ -16,40 +16,6 @@
         echo $json_response;
     }
 
-    // function checkToken(){
-    //     // Récupération des headers HTTP
-    //     $headers = getallheaders();
-    //     if(!isset($headers['Authorization'])){
-    //         return false;
-    //     }
-        
-    //     $authHeader = $headers['Authorization'];
-    //     // Vérifier que le header est bien au format "Bearer <token>"
-    //     if(strpos($authHeader, "Bearer ") !== 0){
-    //         return false;
-    //     }
-        
-    //     $token = trim(substr($authHeader, 7));
-        
-    //     // URL de votre endpoint d'authentification (adaptée à votre environnement)
-    //     $authUrl = "http://localhost:3001/api/endpoint.php?data=" . urlencode($token);
-        
-    //     // Effectuer la requête GET vers l'API d'authentification
-    //     $response = @file_get_contents($authUrl);
-    //     if($response === false){
-    //         return false;
-    //     }
-        
-    //     $result = json_decode($response, true);
-    //     // Si l'API d'authentification répond avec un code 200, le token est valide.
-    //     if(isset($result['status_code']) && $result['status_code'] == 200){
-    //         return true;
-    //     }
-        
-    //     return false;
-    // }
-    
-
     function get_authorization_header(){
         $headers = null;
         
@@ -69,9 +35,11 @@
         
         return $headers;
     }
-        
+
     function get_bearer_token() {
         $headers = get_authorization_header();
+
+        error_log("Authorization Headers: " . print_r($headers, true));
             
         // HEADER: Get the access token from the header
         if (!empty($headers)) {
@@ -83,5 +51,37 @@
             }
         }            
         return null;
+    }
+
+    function checkToken(){
+        $token = get_bearer_token();
+        error_log("Token: " . print_r($token, true));
+        if ($token === null) {
+            return false;
+        }
+        
+        $authUrl = "http://localhost:3001/api/endpoint.php";
+
+        // Effectuer la requête GET vers l'API d'authentification avec le token dans le header
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $authUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Authorization: Bearer ' . $token
+        ));
+        $response = curl_exec($ch);
+        error_log("Response: " . print_r($response, true));
+        if ($response === false) {
+            return false;
+        }
+        curl_close($ch);
+        
+        $result = json_decode($response, true);
+        // Si l'API d'authentification répond avec un code 200, le token est valide.
+        if(isset($result['status_code']) && $result['status_code'] == 200){
+            return true;
+        }
+        
+        return false;
     }
 ?>

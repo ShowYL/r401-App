@@ -7,12 +7,20 @@
     header('Access-Control-Allow-Methods: GET, POST');
     header('Access-Control-Allow-Headers: Content-Type');
 
+    if(!checkToken()){
+        deliver_response(401, 'Unauthorized');
+        exit();
+    }
 
     switch($_SERVER['REQUEST_METHOD']){
         case 'GET':
-            $Selection = getAllSelection();
-            echo json_encode($Selection);
-            break;
+            if (isset($_GET['idMatch'])) {
+                $Selection = getSelection($_GET['idMatch']);
+                echo json_encode($Selection);
+            } else {
+                $Selection = getAllSelection();
+                echo json_encode($Selection);
+            }
         case 'POST':
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['idJoueur']) && isset($data['idMatch']) && isset($data['titulaire']) && isset($data['poste']))
