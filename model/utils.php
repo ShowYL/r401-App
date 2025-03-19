@@ -3,6 +3,10 @@
 
         http_response_code($status_code);
         header('Content-Type:application/json; charset=utf-8');
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: Content-Type, Authorization');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+
 
         $response['status_code'] = $status_code;
         $response['data'] = $data;
@@ -54,14 +58,19 @@
     }
 
     function checkToken(){
+        error_log("checkToken() called");
+    
         $token = get_bearer_token();
-        error_log("Token: " . print_r($token, true));
+        error_log("Extracted Token: " . print_r($token, true));
+    
         if ($token === null) {
+            error_log("Token is null");
             return false;
         }
         
-        $authUrl = "http://localhost:3001/api/endpoint.php";
-
+        $authUrl = "https://chatr410.alwaysdata.net/R401/r401-Auth/api/endpoint.php";
+        error_log("Auth URL: " . $authUrl);
+    
         // Effectuer la requête GET vers l'API d'authentification avec le token dans le header
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $authUrl);
@@ -69,19 +78,33 @@
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
             'Authorization: Bearer ' . $token
         ));
+        error_log("cURL initialized with headers: Authorization: Bearer " . $token);
+    
         $response = curl_exec($ch);
-        error_log("Response: " . print_r($response, true));
         if ($response === false) {
+            $curlError = curl_error($ch);
+            error_log("cURL Error: " . $curlError);
+            curl_close($ch);
             return false;
         }
+        error_log("Raw Response: " . print_r($response, true));
+    
         curl_close($ch);
         
         $result = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log("JSON Decode Error: " . json_last_error_msg());
+            return false;
+        }
+        error_log("Decoded Response: " . print_r($result, true));
+    
         // Si l'API d'authentification répond avec un code 200, le token est valide.
-        if(isset($result['status_code']) && $result['status_code'] == 200){
+        if (isset($result['status_code']) && $result['status_code'] == 200) {
+            error_log("Token is valid");
             return true;
         }
-        
+    
+        error_log("Token is invalid or status_code is not 200");
         return false;
     }
 ?>
