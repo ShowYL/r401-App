@@ -19,8 +19,13 @@
 
     switch($_SERVER['REQUEST_METHOD']){
         case 'GET':
-            $joueurs = getAllJoueurs();
-            echo json_encode($joueurs);
+            if (isset($_GET['id'])) {
+                $joueur = getJoueur($_GET['id']);
+                echo json_encode($joueur);
+            } else {
+                $joueurs = getAllJoueurs();
+                echo json_encode($joueurs);
+            }
             break;
         case 'POST':
             $data = json_decode(file_get_contents('php://input'), true);
