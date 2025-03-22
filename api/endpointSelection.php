@@ -20,42 +20,43 @@
 
     switch($_SERVER['REQUEST_METHOD']){
         case 'GET':
-            if (isset($_GET['idMatch'])) {
-                $Selection = getSelection($_GET['idMatch']);
-                echo json_encode($Selection);
+            if (isset($_GET['Id_Match'])) {
+                $Selection = getSelection($_GET['Id_Match']);
+                deliver_response(200, "Selection found", $Selection);
             } else {
                 $Selection = getAllSelection();
-                echo json_encode($Selection);
+                deliver_response(200, "Selection found", $Selection);
             }
+            break;
         case 'POST':
             $data = json_decode(file_get_contents('php://input'), true);
-            if(isset($data['idJoueur']) && isset($data['idMatch']) && isset($data['titulaire']) && isset($data['poste']))
-                if(createSelection($data['idJoueur'], $data['idMatch'], $data['titulaire'], $data['poste']))
-                    deliver_response(200, "Selection created");
+            if(isset($data['Id_Joueur']) && isset($data['Id_Match']) && isset($data['Titulaire']) && isset($data['Poste']))
+                if(createSelection($data['Id_Joueur'], $data['Id_Match'], $data['Titulaire'], $data['Poste']))
+                    deliver_response(200, "Selection created", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error", $data);
             else
-                deliver_response(401, "Invalid request");
+                deliver_response(401, "Invalid request", $data);
             break;
         case 'PUT':
             $data = json_decode(file_get_contents('php://input'), true);
-            if(isset($data['idJoueur']) && isset($data['idMatch']) && isset($data['titulaire']) && isset($data['poste']))
-                if(updateSelection($data['idJoueur'], $data['idMatch'], $data['titulaire'], $data['poste']))
-                    deliver_response(200, "Selection updated");
+            if(isset($data['Id_Joueur']) && isset($data['Id_Match']) && isset($data['Titulaire']) && isset($data['Poste']))
+                if(updateSelection($data['Id_Joueur'], $data['Id_Match'], $data['Titulaire'], $data['Poste']))
+                    deliver_response(200, "Selection updated", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error",  $data);
             else
-                deliver_response(401, "Invalid request");
+                deliver_response(401, "Invalid request", $data);
             break;
         case 'DELETE':
             $data = json_decode(file_get_contents('php://input'), true);
-            if(isset($data['idSelection']))
-                if(deleteSelection($data['idSelection']))
-                    deliver_response(200, "Selection deleted");
+            if(isset($data['ID_Selection']))
+                if(deleteSelection($data['ID_Selection']))
+                    deliver_response(200, "Selection deleted", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error", $data);
             else
-                deliver_response(401, "Invalid request");
+                deliver_response(401, "Invalid request",   $data);
             break;
     }
 ?>

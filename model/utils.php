@@ -12,6 +12,7 @@
         $response['data'] = $data;
         $response['status'] = $status_message;
         
+        // echo $response['data'];
         $json_response = json_encode($response);
         if ($json_response === false){
             die('json encode ERROR : '.json_last_error_msg());
