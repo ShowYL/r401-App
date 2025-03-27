@@ -19,8 +19,8 @@
 
     switch($_SERVER['REQUEST_METHOD']){
         case 'GET':
-            if (isset($_GET['id'])) {
-                $joueur = getJoueur($_GET['id']);
+            if (isset($_GET['Id_Joueur'])) {
+                $joueur = getJoueur($_GET['Id_Joueur']);
                 deliver_response(200, "Joueur toruvé", $joueur);
             } else {
                 $joueurs = getAllJoueurs();
@@ -31,25 +31,24 @@
             $data = json_decode(file_get_contents('php://input'), true);
             if (isset($data['licence']) && isset($data['nom']) && isset($data['prenom']) && isset($data['taille']) && isset($data['poids']) && isset($data['date_naissance']) && isset($data['statut']) && isset($data['commentaire']))
                 if(createJoueur($data['licence'], $data['nom'], $data['prenom'], $data['taille'], $data['poids'], $data['date_naissance'], $data['statut'], $data['commentaire']))
-                    deliver_response(200, "Joueur created");
+                    deliver_response(200, "Joueur created", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error", $data);
             else
-                deliver_response(401, "Invalid request");
+                deliver_response(401, "Invalid request", $data);
             break;
         case 'PUT':
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['Id_Joueur']) && isset($data['licence']) && isset($data['nom']) && isset($data['prenom']) && isset($data['taille']) && isset($data['poids']) && isset($data['date_naissance']) && isset($data['statut']) && isset($data['commentaire']))
                 if(updateJoueur($data['licence'], $data['nom'], $data['prenom'], $data['taille'], $data['poids'], $data['date_naissance'], $data['statut'], $data['commentaire'], $data['Id_Joueur']))
-                    deliver_response(200, "Joueur updated");
+                    deliver_response(200, "Joueur updated", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error", $data);
             else
                 deliver_response(401, "Invalid request", $data);
             break;
         case 'DELETE':  
             $data = json_decode(file_get_contents('php://input'), true);
-
             if(array_key_exists('Id_Joueur', $data))
                 if(deleteJoueur($data['Id_Joueur']))
                     deliver_response(200, "Joueur deleted");

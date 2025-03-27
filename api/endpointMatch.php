@@ -19,7 +19,7 @@
 
     switch($_SERVER['REQUEST_METHOD']){
         case 'GET':
-            if (isset($_GET['id'])) {
+            if (isset($_GET['Id_Match'])) {
                 $match = getMatch($_GET['Id_Match']);
                 deliver_response(200, "Match found", $match);
             } else {

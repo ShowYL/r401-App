@@ -19,8 +19,8 @@
     
     switch($_SERVER['REQUEST_METHOD']){
         case 'GET':
-            if (isset($_GET['player_id'])) {
-                $playerId = $_GET['player_id'];
+            if (isset($_GET['Id_Joueur'])) {
+                $playerId = $_GET['Id_Joueur'];
                 $stats = getPlayerStats($playerId);
                 echo json_encode($stats);
             } else {
@@ -30,8 +30,8 @@
             break;
         case 'POST':
             $data = json_decode(file_get_contents('php://input'), true);
-            if (isset($data['player_id'])) {
-                $playerId = $data['player_id'];
+            if (isset($data['Id_Joueur'])) {
+                $playerId = $data['Id_Joueur'];
                 $consecutiveSelections = getConsecutiveSelections($playerId);
                 $preferredPosition = getPreferredPosition($playerId);
                 $response = [
