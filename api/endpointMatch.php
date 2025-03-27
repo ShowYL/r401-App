@@ -31,9 +31,9 @@
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['Date_Match']) && isset($data['Heure_Match']) && isset($data['Equipe_Adverse']) && isset($data['Lieu']) && isset($data['Résultat']))
                if(createMatch($data['Date_Match'], $data['Heure_Match'], $data['Equipe_Adverse'], $data['Lieu'], $data['Résultat']))
-                    deliver_response(200, "Match created");
+                    deliver_response(200, "Match created", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error", $data);
             else
                 deliver_response(401, "Invalid request", $data);
             break;
@@ -41,10 +41,10 @@
         case 'PUT':
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['Id_Match']) && isset($data['Date_Match']) && isset($data['Heure_Match']) && isset($data['Equipe_Adverse']) && isset($data['Lieu']) && isset($data['Résultat']))
-                if(upDate_MatchMatch($data['Id_Match'], $data['Date_Match'], $data['Heure_Match'], $data['Equipe_Adverse'], $data['Lieu'], $data['Résultat']))
-                    deliver_response(200, "Match upDate_Matchd");
+                if(updateMatch($data['Date_Match'], $data['Heure_Match'], $data['Equipe_Adverse'], $data['Lieu'], $data['Résultat'],$data['Id_Match']))
+                    deliver_response(200, "Match updated", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error", $data);
             else
                 deliver_response(401, "Invalid request", $data);
             break;
@@ -53,9 +53,9 @@
             $data = json_decode(file_get_contents('php://input'), true);
             if(isset($data['Id_Match']))
                 if(deleteMatch($data['Id_Match']))
-                    deliver_response(200, "Match deleted");
+                    deliver_response(200, "Match deleted", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error", $data);
             else 
                 deliver_response(401, "Invalid request", $data);
             break;

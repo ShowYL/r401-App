@@ -89,5 +89,4 @@ require_once '../connection/connection.php';
         return $stmt->fetchAll();
     }
 
-
 ?>
