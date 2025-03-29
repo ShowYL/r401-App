@@ -1,4 +1,7 @@
 <?php
+    use OpenApi\Annotations as OA;
+
+    require_once '../vendor/autoload.php';
     require_once '../model/JoueurModel.php';
     require_once '../model/utils.php';
 
@@ -21,10 +24,10 @@
         case 'GET':
             if (isset($_GET['Id_Joueur'])) {
                 $joueur = getJoueur($_GET['Id_Joueur']);
-                deliver_response(200, "Joueur toruvé", $joueur);
+                deliver_response(200, "Joueur found", $joueur);
             } else {
                 $joueurs = getAllJoueurs();
-                deliver_response(200, "Joueur toruvé", $joueurs);
+                deliver_response(200, "Joueur found", $joueurs);
             }
             break;
         case 'POST':

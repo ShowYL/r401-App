@@ -1,0 +1,340 @@
+openapi: 3.0.0
+info:
+  title: Titans de Sète Rugby API
+  version: 1.0.0
+  description: API Documentation for the Titans de Sète Rugby Application
+servers:
+  - url: /api
+    description: API Server
+paths:
+  /endpointJoueur.php:
+    get:
+      summary: Récupérer un ou plusieurs joueurs
+      description: Récupère un joueur spécifique ou tous les joueurs
+      operationId: getJoueur
+      tags:
+        - Joueur
+      parameters:
+        - name: Id_Joueur
+          in: query
+          description: ID du joueur à récupérer
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Joueur trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Id_Joueur:
+                          type: integer
+                        licence:
+                          type: string
+                        nom:
+                          type: string
+                        prenom:
+                          type: string
+                        taille:
+                          type: integer
+                        poids:
+                          type: integer
+                        date_naissance:
+                          type: string
+                          format: date
+                        statut:
+                          type: string
+                        commentaire:
+                          type: string
+        '401':
+          description: Token invalide
+    post:
+      summary: Créer un joueur
+      description: Ajoute un nouveau joueur
+      operationId: createJoueur
+      tags:
+        - Joueur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                licence:
+                  type: string
+                nom:
+                  type: string
+                prenom:
+                  type: string
+                taille:
+                  type: integer
+                poids:
+                  type: integer
+                date_naissance:
+                  type: string
+                  format: date
+                statut:
+                  type: string
+                commentaire:
+                  type: string
+      responses:
+        '200':
+          description: Joueur créé
+        '401':
+          description: Requête invalide
+    put:
+      summary: Mettre à jour un joueur
+      description: Met à jour les informations d'un joueur existant
+      operationId: updateJoueur
+      tags:
+        - Joueur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id_Joueur:
+                  type: integer
+                licence:
+                  type: string
+                nom:
+                  type: string
+                prenom:
+                  type: string
+                taille:
+                  type: integer
+                poids:
+                  type: integer
+                date_naissance:
+                  type: string
+                  format: date
+                statut:
+                  type: string
+                commentaire:
+                  type: string
+      responses:
+        '200':
+          description: Joueur mis à jour
+        '401':
+          description: Requête invalide
+    delete:
+      summary: Supprimer un joueur
+      description: Supprime un joueur existant
+      operationId: deleteJoueur
+      tags:
+        - Joueur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id_Joueur:
+                  type: integer
+      responses:
+        '200':
+          description: Joueur supprimé
+        '401':
+          description: Requête invalide
+  /endpointMatch.php:
+    get:
+      summary: Récupérer un ou plusieurs matchs
+      description: Récupère un match spécifique ou tous les matchs
+      operationId: getMatch
+      tags:
+        - Match
+      parameters:
+        - name: Id_Match
+          in: query
+          description: ID du match à récupérer
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Match trouvé
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status_code:
+                    type: integer
+                  status:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Id_Match:
+                          type: integer
+                        date_match:
+                          type: string
+                          format: date-time
+                        lieu_match:
+                          type: string
+                        equipe_adverse:
+                          type: string
+                        score_equipe_locale:
+                          type: integer
+                        score_equipe_adverse:
+                          type: integer
+        '401':
+          description: Token invalide
+    post:
+      summary: Créer un match
+      description: Ajoute un nouveau match
+      operationId: createMatch
+      tags:
+        - Match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date_match:
+                  type: string
+                  format: date-time
+                lieu_match:
+                  type: string
+                equipe_adverse:
+                  type: string
+                score_equipe_locale:
+                  type: integer
+                score_equipe_adverse:
+                  type: integer
+      responses:
+        '200':
+          description: Match créé
+        '401':
+          description: Requête invalide
+    put:
+      summary: Mettre à jour un match
+      description: Met à jour les informations d'un match existant
+      operationId: updateMatch
+      tags:
+        - Match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id_Match:
+                  type: integer
+                date_match:
+                  type: string
+                  format: date-time
+                lieu_match:
+                  type: string
+                equipe_adverse:
+                  type: string
+                score_equipe_locale:
+                  type: integer
+                score_equipe_adverse:
+                  type: integer
+      responses:
+        '200':
+          description: Match mis à jour
+        '401':
+          description: Requête invalide
+    delete:
+      summary: Supprimer un match
+      description: Supprime un match existant
+      operationId: deleteMatch
+      tags:
+        - Match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id_Match:
+                  type: integer
+      responses:
+        '200':
+          description: Match supprimé
+        '401':
+          description: Requête invalide
+  /endpointSelection.php:
+    get:
+      summary: Récupérer les données de sélection.
+      description: >
+        Récupère les données de sélection en fonction des paramètres de requête fournis.
+        - Si `ID_Selection` est fourni, récupère une sélection spécifique.
+        - Si `Id_Joueur` et `Id_Match` sont fournis, récupère une sélection pour un joueur et un match spécifiques.
+        - Si seul `Id_Match` est fourni, récupère tous les joueurs dans la sélection pour le match.
+        - Si aucun paramètre n'est fourni, récupère toutes les sélections.
+      parameters:
+      - name: ID_Selection
+        in: query
+        description: L'ID de la sélection à récupérer.
+        required: false
+        schema:
+        type: integer
+      - name: Id_Joueur
+        in: query
+        description: L'ID du joueur.
+        required: false
+        schema:
+        type: integer
+      - name: Id_Match
+        in: query
+        description: L'ID du match.
+        required: false
+        schema:
+        type: integer
+      responses:
+       '200':
+        description: Données de sélection récupérées avec succès.
+        '401':
+          description: Accès non autorisé.
+        '500':
+         description: Erreur interne du serveur.
+
+    post:
+      summary: Créer une nouvelle sélection.
+      description: Crée une nouvelle sélection avec les données fournies.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id_Joueur:
+                  type: integer
+                  description: L'ID du joueur.
+                Id_Match:
+                  type: integer
+                  description: L'ID du match.
+                Titulaire:
+                  type: boolean
+                  description: Indique si le joueur est titulaire.
+                Poste:
+                  type: string
+                  description: Le poste du joueur.
+        responses:
+          '200': 
+            description: Sélection créée.
