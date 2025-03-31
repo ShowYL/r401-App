@@ -1,7 +1,5 @@
 <?php
-    use OpenApi\Annotations as OA;
 
-    require_once '../vendor/autoload.php';
     require_once '../model/JoueurModel.php';
     require_once '../model/utils.php';
 
@@ -16,7 +14,7 @@
     }
     
     if(!checkToken()){
-        deliver_response(401, 'Token false');
+        deliver_response(402, 'Token false');
         exit();
     }
 
@@ -54,9 +52,9 @@
             $data = json_decode(file_get_contents('php://input'), true);
             if(array_key_exists('Id_Joueur', $data))
                 if(deleteJoueur($data['Id_Joueur']))
-                    deliver_response(200, "Joueur deleted");
+                    deliver_response(200, "Joueur deleted", $data);
                 else
-                    deliver_response(500, "internal server error");
+                    deliver_response(500, "internal server error", $data);
             else
                 deliver_response(401, "Invalid request", $data);
             break;

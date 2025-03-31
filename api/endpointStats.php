@@ -13,7 +13,7 @@
     }
 
     if(!checkToken()){
-        deliver_response(401, 'Unauthorized');
+        deliver_response(402, 'Unauthorized');
         exit();
     }
     
