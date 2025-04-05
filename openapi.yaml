@@ -2,15 +2,18 @@ openapi: 3.0.0
 info:
   title: Titans de Sète Rugby API
   version: 1.0.0
-  description: API Documentation for the Titans de Sète Rugby Application
+  description: Documentation de l'API pour l'application Titans de Sète Rugby
 servers:
   - url: /R401/r401-App/api
-    description: API Server
+    description: Serveur principal de l'API
 components:
   securitySchemes:
     BearerAuth:
       type: http
       scheme: bearer
+      description: Authentification par token Bearer
+      name: Authorization
+      in: header
       bearerFormat: JWT
 security:
   - BearerAuth: []
@@ -18,63 +21,26 @@ paths:
   /endpointJoueur.php:
     get:
       summary: Récupérer un ou plusieurs joueurs
-      description: Récupère un joueur spécifique ou tous les joueurs
+      description: Permet de récupérer un joueur spécifique ou tous les joueurs
       operationId: getJoueur
       tags:
         - Joueur
       parameters:
-        - name: Authorization
-          in: header
-          description: Token d'authentification JWT
-          required: true
-          schema:
-            type: string
         - name: Id_Joueur
           in: query
           description: ID du joueur à récupérer
           required: false
           schema:
             type: integer
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: Joueur trouvé
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status_code:
-                    type: integer
-                  status:
-                    type: string
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Id_Joueur:
-                          type: integer
-                        licence:
-                          type: string
-                        nom:
-                          type: string
-                        prenom:
-                          type: string
-                        taille:
-                          type: integer
-                        poids:
-                          type: integer
-                        date_naissance:
-                          type: string
-                          format: date
-                        statut:
-                          type: string
-                        commentaire:
-                          type: string
         '401':
-          description: Token invalide ou non fourni
+          description: Requête invalide
         '402':
-          description: Token incorrect
+          description: Token invalide
         '500':
           description: Erreur interne du serveur
     post:
@@ -83,13 +49,6 @@ paths:
       operationId: createJoueur
       tags:
         - Joueur
-      parameters:
-        - name: Authorization
-          in: header
-          description: Token d'authentification JWT
-          required: true
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -114,13 +73,15 @@ paths:
                   type: string
                 commentaire:
                   type: string
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: Joueur créé
         '401':
-          description: Requête invalide ou token non fourni
+          description: Requête invalide
         '402':
-          description: Token incorrect
+          description: Token invalide
         '500':
           description: Erreur interne du serveur
     put:
@@ -129,13 +90,6 @@ paths:
       operationId: updateJoueur
       tags:
         - Joueur
-      parameters:
-        - name: Authorization
-          in: header
-          description: Token d'authentification JWT
-          required: true
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -162,13 +116,15 @@ paths:
                   type: string
                 commentaire:
                   type: string
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: Joueur mis à jour
         '401':
-          description: Requête invalide ou token non fourni
+          description: Requête invalide
         '402':
-          description: Token incorrect
+          description: Token invalide
         '500':
           description: Erreur interne du serveur
     delete:
@@ -177,13 +133,6 @@ paths:
       operationId: deleteJoueur
       tags:
         - Joueur
-      parameters:
-        - name: Authorization
-          in: header
-          description: Token d'authentification JWT
-          required: true
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -193,12 +142,166 @@ paths:
               properties:
                 Id_Joueur:
                   type: integer
+      security:
+        - BearerAuth: []
       responses:
         '200':
           description: Joueur supprimé
         '401':
-          description: Requête invalide ou token non fourni
+          description: Requête invalide
         '402':
-          description: Token incorrect
+          description: Token invalide
+        '500':
+          description: Erreur interne du serveur
+
+  /endpointMatch.php:
+    get:
+      summary: Récupérer un ou plusieurs matchs
+      description: Permet de récupérer un match spécifique ou tous les matchs
+      operationId: getMatch
+      tags:
+        - Match
+      parameters:
+        - name: Id_Match
+          in: query
+          description: ID du match à récupérer
+          required: false
+          schema:
+            type: integer
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Match trouvé
+        '401':
+          description: Requête invalide
+        '402':
+          description: Token invalide
+        '500':
+          description: Erreur interne du serveur
+    post:
+      summary: Créer un match
+      description: Ajoute un nouveau match
+      operationId: createMatch
+      tags:
+        - Match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date_match:
+                  type: string
+                  format: date
+                heure_match:
+                  type: string
+                  format: time
+                equipe_adverse:
+                  type: string
+                lieu:
+                  type: string
+                resultat:
+                  type: string
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Match créé
+        '401':
+          description: Requête invalide
+        '402':
+          description: Token invalide
+        '500':
+          description: Erreur interne du serveur
+    put:
+      summary: Mettre à jour un match
+      description: Met à jour les informations d'un match existant
+      operationId: updateMatch
+      tags:
+        - Match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id_Match:
+                  type: integer
+                date_match:
+                  type: string
+                  format: date
+                heure_match:
+                  type: string
+                  format: time
+                equipe_adverse:
+                  type: string
+                lieu:
+                  type: string
+                resultat:
+                  type: string
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Match mis à jour
+        '401':
+          description: Requête invalide
+        '402':
+          description: Token invalide
+        '500':
+          description: Erreur interne du serveur
+    delete:
+      summary: Supprimer un match
+      description: Supprime un match existant
+      operationId: deleteMatch
+      tags:
+        - Match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Id_Match:
+                  type: integer
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Match supprimé
+        '401':
+          description: Requête invalide
+        '402':
+          description: Token invalide
+        '500':
+          description: Erreur interne du serveur
+
+  /endpointStats.php:
+    get:
+      summary: Récupérer les statistiques
+      description: Permet de récupérer les statistiques globales ou celles d'un joueur spécifique
+      operationId: getStats
+      tags:
+        - Statistiques
+      parameters:
+        - name: Id_Joueur
+          in: query
+          description: ID du joueur pour lequel récupérer les statistiques
+          required: false
+          schema:
+            type: integer
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Statistiques récupérées avec succès
+        '401':
+          description: Requête invalide
+        '402':
+          description: Token invalide
         '500':
           description: Erreur interne du serveur

@@ -29,10 +29,10 @@
                     'consecutive_selections' => $consecutiveSelections,
                     'preferred_position' => $preferredPosition
                 ];
-                echo json_encode($stats);
+                deliver_response(200, "Joueur stats found", $stats);
             } else {
                 $stats = getMatchStats();
-                echo json_encode($stats);
+                deliver_response(200, "Match stats found", $stats);
             }
             break;
         default:
