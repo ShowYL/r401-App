@@ -280,6 +280,157 @@ paths:
         '500':
           description: Erreur interne du serveur
 
+  /endpointSelection.php:
+    get:
+      summary: Récupérer les données de sélection.
+      description: >
+        Récupère les données de sélection en fonction des paramètres de requête fournis.
+        - Si `ID_Selection` est fourni, récupère une sélection spécifique.
+        - Si `Id_Joueur` et `Id_Match` sont fournis, récupère une sélection pour un joueur et un match spécifiques.
+        - Si seul `Id_Match` est fourni, récupère tous les joueurs dans la sélection pour le match.
+        - Si aucun paramètre n'est fourni, récupère toutes les sélections.
+      tags:
+        - Selection
+      parameters:
+        - name: ID_Selection
+          in: query
+          description: L'ID de la sélection à récupérer.
+          required: false
+          schema:
+          type: integer
+        - name: Id_Joueur
+          in: query
+          description: L'ID du joueur.
+          required: false
+          schema:
+          type: integer
+        - name: Id_Match
+          in: query
+          description: L'ID du match.
+          required: false
+          schema:
+          type: integer
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Données de sélection récupérées avec succès.
+        '401':
+          description: Accès non autorisé.
+        '402':
+          description: Token invalide.
+        '500':
+          description: Erreur interne du serveur.
+
+    post:
+      summary: Créer une nouvelle sélection.
+      description: Crée une nouvelle sélection avec les données fournies.
+      tags:
+        - Selection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+              Id_Joueur:
+                type: integer
+                description: L'ID du joueur.
+              Id_Match:
+                type: integer
+                description: L'ID du match.
+              Titulaire:
+                type: boolean
+                description: Indique si le joueur est titulaire.
+              Poste:
+                type: string
+                description: Le poste du joueur.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Sélection créée.
+        '401':
+          description: Requête invalide.
+        '402':
+          description: Token invalide.
+        '500':
+          description: Erreur interne du serveur.
+
+    put:
+      summary: Mettre à jour une sélection existante.
+      description: Met à jour les informations d'une sélection existante.
+      tags:
+        - Selection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+              Id_Joueur:
+                type: integer
+                description: L'ID du joueur.
+              Id_Match:
+                type: integer
+                description: L'ID du match.
+              Titulaire:
+                type: boolean
+                description: Indique si le joueur est titulaire.
+              Poste:
+                type: string
+                description: Le poste du joueur.
+              Note:
+                type: number
+                format: float
+                description: La note attribuée au joueur.
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Sélection mise à jour.
+        '401':
+          description: Requête invalide.
+        '402':
+          description: Token invalide.
+        '500':
+          description: Erreur interne du serveur.
+
+    delete:
+      summary: Supprimer une sélection.
+      description: Supprime une sélection existante en fonction des données fournies.
+      tags:
+        - Selection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+              ID_Selection:
+                type: integer
+                description: L'ID de la sélection à supprimer.
+              Id_Joueur:
+                type: integer
+                description: L'ID du joueur.
+              Id_Match:
+                type: integer
+                description: L'ID du match.
+      security:
+       - BearerAuth: []
+      responses:
+        '200':
+          description: Sélection supprimée.
+        '401':
+          description: Requête invalide.
+        '402':
+          description: Token invalide.
+        '500':
+          description: Erreur interne du serveur.
+
   /endpointStats.php:
     get:
       summary: Récupérer les statistiques
